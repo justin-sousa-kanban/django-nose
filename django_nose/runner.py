@@ -10,6 +10,7 @@ in settings.py for arguments that you want always passed to nose.
 import new
 import os
 import sys
+import warnings
 from optparse import make_option
 
 from django.conf import settings
@@ -249,6 +250,10 @@ def _reusing_db():
     """Return whether the ``REUSE_DB`` flag was passed"""
     return os.getenv('REUSE_DB', 'false').lower() in ('true', '1', '')
 
+def _suppress_reset_warnings():
+    """Return whether the ``SUPPRESS_WARNINGS`` flag was passed"""
+    return os.getenv('SUPPRESS_WARNINGS', 'false').lower() in ('true', '1', '')
+
 
 def _can_support_reuse_db(connection):
     """Return whether it makes any sense to
@@ -352,8 +357,13 @@ class NoseTestSuiteRunner(BasicNoseRunner):
                     reset_statements = connection.ops.sequence_reset_sql(
                             style, self._get_models_for_connection(connection))
 
+                if _suppress_reset_warnings():
+                    warnings.filterwarnings("ignore")
+
                 for reset_statement in reset_statements:
                     cursor.execute(reset_statement)
+
+                warnings.resetwarnings()
 
                 # Django v1.3 (https://code.djangoproject.com/ticket/9964)
                 # starts using commit_unless_managed() for individual
