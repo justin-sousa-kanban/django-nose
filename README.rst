@@ -82,7 +82,7 @@ you want to use it.
 
 If tests are stopped by warnings when resetting the database, and you know 
 these warnings are harmless, they can be suppressed with the SUPPRESS_WARNINGS
-environment variable:
+environment variable::
 
     REUSE_DB=1 SUPPRESS_WARNINGS=1 ./manage.py test
 
