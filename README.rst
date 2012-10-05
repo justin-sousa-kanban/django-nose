@@ -80,6 +80,12 @@ Also, REUSE_DB is not compatible with TransactionTestCases that leave junk in
 the DB, so be sure to make your TransactionTestCases hygienic (see below) if
 you want to use it.
 
+If tests are stopped by warnings when resetting the database, and you know 
+these warnings are harmless, they can be suppressed with the SUPPRESS_WARNINGS
+environment variable:
+
+    REUSE_DB=1 SUPPRESS_WARNINGS=1 ./manage.py test
+
 
 Enabling Fast Fixtures
 ----------------------
